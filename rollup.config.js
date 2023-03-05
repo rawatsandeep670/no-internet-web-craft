@@ -21,7 +21,7 @@ export default {
     {
       file: pkg.browser,
       format: 'umd',
-      name: 'CallApp',
+      name: 'NetworkErrorFallback',
     },
   ],
   external: ['*.js'],
