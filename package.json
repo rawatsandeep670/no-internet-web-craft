@@ -2,9 +2,9 @@
   "name": "no-internet-web-craft",
   "version": "1.0.0",
   "description": "Craft your No Internet or Page Not Found web page",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "browser": "dist/index.umd.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/index.js",
+  "browser": "dist/umd/no-internet-web-craft.js",
   "types": "dist/type/index.d.ts",
   "directories": {
     "dist": "dist"
@@ -36,11 +36,7 @@
     "page-not-found",
     "page-not-found-web-page-modify"
   ],
-  "author": {
-    "name": "Sandeep Singh",
-    "email": "rawatsandeep670@gmail.com",
-    "url": "https://github.com/rawatsandeep670"
-  },
+  "author": "Sandeep Singh <rawatsandeep670@gmail.com> (https://github.com/rawatsandeep670)",
   "license": "MIT",
   "homepage": "https://github.com/rawatsandeep670/no-internet-web-craft#readme",
   "devDependencies": {
@@ -72,5 +68,8 @@
   },
   "dependencies": {
     "http-server": "^14.1.0"
+  },
+  "bugs": {
+    "url": "https://github.com/rawatsandeep670/no-internet-web-craft/issues"
   }
 }

@@ -34,7 +34,11 @@ export default {
       babelHelpers: 'bundled',
     }),
     copy({
-      targets: [{ src: 'src/sw.js', dest: 'dist' }],
+      targets: [
+        { src: 'src/sw.js', dest: 'dist' },
+        { src: 'README.md', dest: 'dist' },
+        { src: 'package.json', dest: 'dist' },
+      ],
     }),
   ],
 };
