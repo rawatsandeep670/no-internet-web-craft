@@ -1,10 +1,11 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
+import copy from 'rollup-plugin-copy';
 import pkg from './package.json';
 
 const input = 'src/index.ts';
-const extensions = ['.js', '.ts'];
+const extensions = ['.ts'];
 
 export default {
   input,
@@ -23,7 +24,7 @@ export default {
       name: 'CallApp',
     },
   ],
-  external: [],
+  external: ['*.js'],
   plugins: [
     resolve({ extensions }),
     commonjs(),
@@ -31,6 +32,9 @@ export default {
       extensions,
       include: ['src/**/*'],
       babelHelpers: 'bundled',
+    }),
+    copy({
+      targets: [{ src: 'src/sw.js', dest: 'dist' }],
     }),
   ],
 };
