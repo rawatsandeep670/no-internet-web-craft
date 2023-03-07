@@ -19,7 +19,7 @@ export default class NetworkErrorFallback {
 
     return new Promise((resolve, reject) => {
       navigator.serviceWorker
-        .register('./sw.js', {
+        .register('/sw.js', {
           scope: './',
         })
         .then((registration) => {

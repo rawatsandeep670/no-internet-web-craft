@@ -1,17 +1,17 @@
 {
   "name": "no-internet-web-craft",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "description": "Craft your No Internet or Page Not Found web page",
-  "main": "dist/cjs/index.js",
-  "module": "dist/index.js",
-  "browser": "dist/umd/no-internet-web-craft.js",
-  "browser.min": "dist/umd/no-internet-web-craft.min.js",
-  "types": "dist/type/index.d.ts",
+  "main": "cjs/index.js",
+  "module": "index.js",
+  "browser": "umd/no-internet-web-craft.js",
+  "browser.min": "umd/no-internet-web-craft.min.js",
+  "types": "type/index.d.ts",
   "directories": {
-    "dist": "dist"
+    "dist": "./"
   },
   "files": [
-    "dist"
+    "./"
   ],
   "scripts": {
     "lint-eslint": "eslint --cache --ext .ts ./src",

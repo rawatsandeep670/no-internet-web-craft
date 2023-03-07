@@ -12,20 +12,20 @@ export default {
   input,
   output: [
     {
-      file: pkg.main,
+      file: `dist/${pkg.main}`,
       format: 'cjs',
     },
     {
-      file: pkg.module,
+      file: `dist/${pkg.module}`,
       format: 'es',
     },
     {
-      file: pkg.browser,
+      file: `dist/${pkg.browser}`,
       format: 'umd',
       name: 'NetworkErrorFallback',
     },
     {
-      file: pkg['browser.min'],
+      file: `dist/${pkg['browser.min']}`,
       format: 'umd',
       name: 'NetworkErrorFallback',
       plugins: [terser()],
