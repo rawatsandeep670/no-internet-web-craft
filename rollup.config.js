@@ -2,6 +2,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
 import copy from 'rollup-plugin-copy';
+import terser from '@rollup/plugin-terser';
 import pkg from './package.json';
 
 const input = 'src/index.ts';
@@ -22,6 +23,12 @@ export default {
       file: pkg.browser,
       format: 'umd',
       name: 'NetworkErrorFallback',
+    },
+    {
+      file: pkg['browser.min'],
+      format: 'umd',
+      name: 'NetworkErrorFallback',
+      plugins: [terser()],
     },
   ],
   external: ['*.js'],
