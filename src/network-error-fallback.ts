@@ -1,4 +1,5 @@
-import { IPromiseEventMap, ServiceWorkerType } from './types';
+import { IEventRequest, IPromiseEventMap, ServiceWorkerType } from './types';
+import * as pkg from '../package.json';
 
 export default class NetworkErrorFallback {
   private version: string;
@@ -22,7 +23,7 @@ export default class NetworkErrorFallback {
         .register('/sw.js', {
           scope: './',
         })
-        .then((registration) => {
+        .then((registration: ServiceWorkerRegistration) => {
           let serviceWorker: ServiceWorkerType;
 
           if (registration.installing) {
@@ -31,28 +32,20 @@ export default class NetworkErrorFallback {
             serviceWorker = registration.waiting;
           } else if (registration.active) {
             serviceWorker = registration.active;
-            this.addEventListenerToSW();
-            this.sendEventToSW(serviceWorker, {
-              type: 'CACHE',
-              url: this.networkFallbackURL,
-              version: this.version,
-            }).then((res) => {
+            this.onWorkerActivated(serviceWorker).then((res) => {
               resolve(res);
             });
+            this.autoUpdateCheckForSwFile(registration, serviceWorker);
           }
 
           if (serviceWorker) {
             (serviceWorker as ServiceWorker).addEventListener('statechange', (event) => {
               const sw = event?.target as ServiceWorker;
               if (sw.state === 'activated') {
-                this.addEventListenerToSW();
-                this.sendEventToSW(serviceWorker, {
-                  type: 'CACHE',
-                  url: this.networkFallbackURL,
-                  version: this.version,
-                }).then((res) => {
+                this.onWorkerActivated(serviceWorker).then((res) => {
                   resolve(res);
                 });
+                this.autoUpdateCheckForSwFile(registration, serviceWorker);
               }
             });
           }
@@ -65,12 +58,46 @@ export default class NetworkErrorFallback {
     });
   };
 
+  private async onWorkerActivated(serviceWorker: ServiceWorkerType): Promise<any> {
+    this.addEventListenerToSW();
+    const res = await this.sendEventToSW(serviceWorker, {
+      type: 'CACHE',
+      data: {
+        url: this.networkFallbackURL,
+        version: this.version,
+      },
+    });
+    return res;
+  }
+
+  /**
+   * Check for auto update of SW file, if update available then update service worker according to new sw.js file.
+   *
+   * @param serviceWorker Service worker instance.
+   */
+  private autoUpdateCheckForSwFile(
+    registration: ServiceWorkerRegistration,
+    serviceWorker: ServiceWorkerType
+  ) {
+    this.sendEventToSW(serviceWorker, {
+      type: 'GET_CURRENT_SW_VERSION',
+      data: {
+        version: pkg.swVersion,
+      },
+    }).then((versionCheckData: any) => {
+      if (versionCheckData.update) {
+        registration.update();
+      }
+      console.log('res', versionCheckData);
+    });
+  }
+
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  sendEventToSW = (swInstance: ServiceWorkerType, message: any): Promise<any> => {
+  sendEventToSW = (swInstance: ServiceWorkerType, data: IEventRequest<any>): Promise<any> => {
     const identity = (Math.random() * Date.now()).toString(16);
     return new Promise((resolve, reject) => {
       this.eventPromiseMap.set(identity, { resolve, reject });
-      (swInstance as ServiceWorker).postMessage({ ...message, identity });
+      (swInstance as ServiceWorker).postMessage({ ...data, identity });
     });
   };
 

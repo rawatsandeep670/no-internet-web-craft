@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
 import copy from 'rollup-plugin-copy';
 import terser from '@rollup/plugin-terser';
+import json from '@rollup/plugin-json';
 import pkg from './package.json';
 
 const input = 'src/index.ts';
@@ -35,6 +36,7 @@ export default {
   plugins: [
     resolve({ extensions }),
     commonjs(),
+    json(),
     babel({
       extensions,
       include: ['src/**/*'],

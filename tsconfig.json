@@ -5,6 +5,7 @@
     "module": "commonjs",
     "allowJs": false,
     "declaration": true,
+    "resolveJsonModule": true,
     "types": ["node"],
     "outDir": "dist/type",
     "strict": true,

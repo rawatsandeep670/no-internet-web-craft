@@ -2,6 +2,7 @@
 const CACHE_NAME = 'SPA_ERROR_CACHE';
 let FILE_VERSION = '-1';
 let FALLBACK_URL = '';
+let SW_VERSION = '-1';
 
 const addResourcesToCache = async (resources) => {
   const cache = await caches.open(CACHE_NAME);
@@ -33,34 +34,6 @@ const checkForNetwork = async ({ request }) => {
   }
 };
 
-// eslint-disable-next-line no-unused-vars
-self.addEventListener('activate', (event) => {
-  // sw activated
-});
-
-// eslint-disable-next-line no-unused-vars
-self.addEventListener('install', (event) => {
-  // sw installed
-});
-
-self.addEventListener('message', async (event) => {
-  const { data, source } = event;
-  switch (data.type) {
-    case 'CACHE':
-      if (FILE_VERSION !== data.version) {
-        await caches.delete(CACHE_NAME);
-        FILE_VERSION = data.version;
-        FALLBACK_URL = data.url;
-        await addResourcesToCache([data.url]);
-      }
-      // eslint-disable-next-line no-use-before-define
-      postMessageToClient(source.id, { ...data, status: 'success' });
-      break;
-    default:
-      console.log('Event not covered!', data);
-  }
-});
-
 async function postMessageToClient(clientId, eventData) {
   if (!clientId) return;
 
@@ -75,6 +48,41 @@ async function postMessageToClient(clientId, eventData) {
   // Send a message to the client.
   client.postMessage(eventData);
 }
+
+// eslint-disable-next-line no-unused-vars
+self.addEventListener('activate', (event) => {
+  // sw activated
+});
+
+// eslint-disable-next-line no-unused-vars
+self.addEventListener('install', (event) => {
+  // sw installed
+});
+
+self.addEventListener('message', async (event) => {
+  const { data, source } = event;
+  const messageData = data.data;
+  switch (data.type) {
+    case 'CACHE':
+      if (FILE_VERSION !== messageData.version) {
+        await caches.delete(CACHE_NAME);
+        FILE_VERSION = messageData.version;
+        FALLBACK_URL = messageData.url;
+        await addResourcesToCache([messageData.url]);
+      }
+      postMessageToClient(source.id, { ...data, status: 'success' });
+      break;
+    case 'GET_CURRENT_SW_VERSION':
+      if (messageData.version !== SW_VERSION) {
+        SW_VERSION = messageData.version;
+        return postMessageToClient(source.id, { ...data, update: true });
+      }
+      postMessageToClient(source.id, { ...data, update: false });
+      break;
+    default:
+      console.log('Event not covered!', data);
+  }
+});
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;
