@@ -32,10 +32,9 @@
   },
   "keywords": [
     "rollup",
-    "no-internet",
-    "no-internet-web-page-modify",
-    "page-not-found",
-    "page-not-found-web-page-modify"
+    "typescript",
+    "Babel",
+    "promises"
   ],
   "author": "Sandeep Singh <rawatsandeep670@gmail.com> (https://github.com/rawatsandeep670)",
   "license": "MIT",
