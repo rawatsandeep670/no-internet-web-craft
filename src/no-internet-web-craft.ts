@@ -1,6 +1,6 @@
 import { IEventRequest, IPromiseEventMap, ServiceWorkerType } from './types';
 
-export default class NetworkErrorFallback {
+export default class NoInternetWebCraft {
   private version: string;
 
   private networkFallbackURL: string;

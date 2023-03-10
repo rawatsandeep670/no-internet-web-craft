@@ -1,3 +1,3 @@
-import NoInternetWebCraft from './network-error-fallback';
+import NoInternetWebCraft from './no-internet-web-craft';
 
 export default NoInternetWebCraft;

@@ -1,6 +1,6 @@
 {
   "name": "no-internet-web-craft",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Craft your No Internet or Page Not Found web page",
   "main": "cjs/index.js",
   "module": "index.js",
