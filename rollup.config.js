@@ -23,12 +23,12 @@ export default {
     {
       file: `dist/${pkg.browser}`,
       format: 'umd',
-      name: 'NetworkErrorFallback',
+      name: 'NoInternetWebCraft',
     },
     {
       file: `dist/${pkg['browser.min']}`,
       format: 'umd',
-      name: 'NetworkErrorFallback',
+      name: 'NoInternetWebCraft',
       plugins: [terser()],
     },
   ],

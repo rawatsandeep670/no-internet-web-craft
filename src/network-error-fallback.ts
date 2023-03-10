@@ -1,5 +1,4 @@
 import { IEventRequest, IPromiseEventMap, ServiceWorkerType } from './types';
-import * as pkg from '../package.json';
 
 export default class NetworkErrorFallback {
   private version: string;
@@ -35,7 +34,6 @@ export default class NetworkErrorFallback {
             this.onWorkerActivated(serviceWorker).then((res) => {
               resolve(res);
             });
-            this.autoUpdateCheckForSwFile(registration, serviceWorker);
           }
 
           if (serviceWorker) {
@@ -45,7 +43,6 @@ export default class NetworkErrorFallback {
                 this.onWorkerActivated(serviceWorker).then((res) => {
                   resolve(res);
                 });
-                this.autoUpdateCheckForSwFile(registration, serviceWorker);
               }
             });
           }
@@ -58,38 +55,15 @@ export default class NetworkErrorFallback {
     });
   };
 
-  private async onWorkerActivated(serviceWorker: ServiceWorkerType): Promise<any> {
+  private onWorkerActivated(serviceWorker: ServiceWorkerType): Promise<any> {
     this.addEventListenerToSW();
-    const res = await this.sendEventToSW(serviceWorker, {
+    return this.sendEventToSW(serviceWorker, {
       type: 'CACHE',
       data: {
         url: this.networkFallbackURL,
         version: this.version,
       },
-    });
-    return res;
-  }
-
-  /**
-   * Check for auto update of SW file, if update available then update service worker according to new sw.js file.
-   *
-   * @param serviceWorker Service worker instance.
-   */
-  private autoUpdateCheckForSwFile(
-    registration: ServiceWorkerRegistration,
-    serviceWorker: ServiceWorkerType
-  ) {
-    this.sendEventToSW(serviceWorker, {
-      type: 'GET_CURRENT_SW_VERSION',
-      data: {
-        version: pkg.swVersion,
-      },
-    }).then((versionCheckData: any) => {
-      if (versionCheckData.update) {
-        registration.update();
-      }
-      console.log('res', versionCheckData);
-    });
+    }).then((res: any) => res);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

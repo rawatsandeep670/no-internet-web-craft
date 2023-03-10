@@ -2,7 +2,6 @@
 const CACHE_NAME = 'SPA_ERROR_CACHE';
 let FILE_VERSION = '-1';
 let FALLBACK_URL = '';
-let SW_VERSION = '-1';
 
 const addResourcesToCache = async (resources) => {
   const cache = await caches.open(CACHE_NAME);
@@ -52,11 +51,13 @@ async function postMessageToClient(clientId, eventData) {
 // eslint-disable-next-line no-unused-vars
 self.addEventListener('activate', (event) => {
   // sw activated
+  self.skipWaiting();
 });
 
 // eslint-disable-next-line no-unused-vars
 self.addEventListener('install', (event) => {
   // sw installed
+  self.skipWaiting();
 });
 
 self.addEventListener('message', async (event) => {
@@ -71,13 +72,6 @@ self.addEventListener('message', async (event) => {
         await addResourcesToCache([messageData.url]);
       }
       postMessageToClient(source.id, { ...data, status: 'success' });
-      break;
-    case 'GET_CURRENT_SW_VERSION':
-      if (messageData.version !== SW_VERSION) {
-        SW_VERSION = messageData.version;
-        return postMessageToClient(source.id, { ...data, update: true });
-      }
-      postMessageToClient(source.id, { ...data, update: false });
       break;
     default:
       console.log('Event not covered!', data);
