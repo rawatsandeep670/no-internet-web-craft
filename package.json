@@ -1,6 +1,6 @@
 {
   "name": "no-internet-web-craft",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Craft your No Internet or Page Not Found web page",
   "main": "cjs/index.js",
   "module": "index.js",
@@ -18,7 +18,8 @@
     "check-types": "tsc --noEmit",
     "lint": "npm run lint-eslint & npm run check-types",
     "declare-type": "tsc --emitDeclarationOnly",
-    "build": "npm run declare-type & rollup -c"
+    "change-readme": "node change-readme.js",
+    "build": "npm run declare-type & rollup -c & npm run change-readme"
   },
   "husky": {
     "hooks": {
@@ -64,6 +65,7 @@
     "eslint-plugin-unicorn": "^20.1.0",
     "husky": "^1.1.1",
     "prettier": "^2.0.5",
+    "replace-in-file": "^6.3.5",
     "rollup": "^2.15.0",
     "rollup-plugin-copy": "^3.4.0",
     "typescript": "^3.9.5"
